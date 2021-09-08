@@ -5,7 +5,9 @@ import java.util.Scanner;
 import javax.security.auth.login.LoginException;
 
 import de.CarrotListeners.CommandListener;
+import de.CarrotListeners.ReactionListener;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
@@ -27,8 +29,10 @@ public class Main {
 		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("");
 		
 		builder.setStatus(OnlineStatus.ONLINE);
+		builder.setActivity(Activity.playing("Use c!initialize to see more options"));
 		
 		builder.addEventListeners(new CommandListener());
+		builder.addEventListeners(new ReactionListener());
 		
 		shardMan = builder.build();
 		

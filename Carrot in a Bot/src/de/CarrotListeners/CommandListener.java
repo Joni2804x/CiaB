@@ -10,17 +10,22 @@ public class CommandListener extends ListenerAdapter
 	{
 		String message = event.getMessage().getContentDisplay().toLowerCase();
 		
-		String[] args = message.substring(2).split("");
+		String[] args = message.substring(2).split(" ");
 		
 		CommandManager obj = new CommandManager();
 		
-		if(obj.commands.containsKey(args[0]))
+		if(message.startsWith("c!"))
 		{
-			obj.perform(args[0], event.getMessage(), event.getMember(), event.getTextChannel());
-		}
-		else
-		{
-			event.getChannel().sendMessage("Unbekannter Befehl!").queue();
+			
+			if(obj.commands.containsKey(args[0]))
+			{
+				obj.perform(args[0], event.getMessage(), event.getMember(), event.getTextChannel());
+			}
+			else
+			{
+				//System.out.println(args[0]);
+				event.getChannel().sendMessage("Unbekannter Befehl!").queue();
+			}
 		}
 	}
 }

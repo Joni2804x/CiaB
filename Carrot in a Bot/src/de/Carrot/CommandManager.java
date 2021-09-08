@@ -16,7 +16,7 @@ public class CommandManager
 	{
 		this.commands = new ConcurrentHashMap<>();
 		
-		this.commands.put("initialize", new InitializeCommand());
+		this.commands.put("start", new InitializeCommand());
 	
 	}
 	

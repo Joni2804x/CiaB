@@ -13,6 +13,8 @@ public class InitializeCommand implements ServerCommand
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message)
 	{
+		message.delete().queue();
+		
 		EmbedBuilder eb = new EmbedBuilder();
 		
 		eb.setTitle("🥕Carrot in a Box📦");
@@ -20,12 +22,13 @@ public class InitializeCommand implements ServerCommand
 		eb.setColor(Color.GREEN);
 		eb.addField("Rules:", "React with ❓ to see the information on the game", false);
 		eb.addField("Start:", "React with ✅ to start the game (2 players requierd)", false);
+		eb.addField("", "React with 🗑️ to delete this message", false);
 		
 		rmessage = channel.sendMessage(eb.build()).complete();
 		
 		rmessage.addReaction("❓").queue();
 		rmessage.addReaction("✅").queue();
-		
+		rmessage.addReaction("🗑️").queue();
 	}
 
 }
