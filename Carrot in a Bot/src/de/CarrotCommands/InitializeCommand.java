@@ -6,13 +6,17 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class InitializeCommand implements ServerCommand
 {
 	public static Message rmessage;
+	public static User Author;
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message)
 	{
+		Author = m.getUser();
 		message.delete().queue();
 		
 		EmbedBuilder eb = new EmbedBuilder();

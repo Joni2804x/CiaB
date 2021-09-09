@@ -30,6 +30,7 @@ public class Main {
 		
 		builder.setStatus(OnlineStatus.ONLINE);
 		builder.setActivity(Activity.playing("Use c!initialize to see more options"));
+		builder.setAutoReconnect(true);
 		
 		builder.addEventListeners(new CommandListener());
 		builder.addEventListeners(new ReactionListener());

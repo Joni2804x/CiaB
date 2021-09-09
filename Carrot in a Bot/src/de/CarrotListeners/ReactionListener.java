@@ -23,6 +23,7 @@ public class ReactionListener extends ListenerAdapter
 {
 	
 	static Message emessage;
+	static Message nmessage;
 	static Message pm1;
 	static Message pm2;
 	static Message pm3;
@@ -33,6 +34,7 @@ public class ReactionListener extends ListenerAdapter
 	static boolean swapped;
 	static int t;
 	static boolean carrot;
+	static boolean help = false;
 	
 	public void onMessageReactionAdd(MessageReactionAddEvent event)
 	{
@@ -68,7 +70,8 @@ public class ReactionListener extends ListenerAdapter
 					
 					if(participants.size() == 2)
 					{				
-						//event.getChannel().sendMessage("A game is currently active!").queue();
+						message.clearReactions("✅").queue();;
+						nmessage = event.getChannel().sendMessage("A game is currently active!").complete();
 						Random rand = new Random();
 						t = rand.nextInt(1);
 						carrot = new Random().nextBoolean();
@@ -134,30 +137,49 @@ public class ReactionListener extends ListenerAdapter
 			
 		}
 		
-		if(event.getReactionEmote().getEmoji().equals("🗑️") && event.getMessageId().equals(message.getId()) && event.getUser().isBot() == false && event.getUser() == message.getAuthor())
+		if(!event.getUser().isBot())
+		{
+			
+		if(event.getReactionEmote().getEmoji().equals("🗑️") && event.getMessageId().equals(message.getId()) && event.getUser() == InitializeCommand.Author)
 		{
 			message.delete().queue();
+			Message thxmessage = event.getChannel().sendMessage("Thank you for playing!").complete();
+			thxmessage.delete().queueAfter(15, TimeUnit.SECONDS);
 		}
 		
-		if(event.getReactionEmote().getEmoji().equals("🗑️") && event.getMessageId().equals(emessage.getId()) && event.getUser().isBot() == false)
+		if(help == true)
 		{
-			emessage.delete().queue();
+			
+			if(event.getReactionEmote().getEmoji().equals("🗑️") && event.getMessageId().equals(emessage.getId()))
+			{
+				emessage.delete().queue();
+				help = false;
+			}
+		
 		}
 		
-		if(event.getUser().isBot() == false && event.getReactionEmote().getEmoji().equals("🚫") && event.getMessageId().equals(pm2.getId()) || event.getMessageId().equals(pm3.getId()))
+		if(event.getReactionEmote().getEmoji().equals("🚫") && event.getMessageId().equals(pm2.getId()))
 		{
 			swapped = false;
 			endStay();
 		}
-		else
+		else if(event.getReactionEmote().getEmoji().equals("🚫") && event.getMessageId().equals(pm3.getId()))
 		{
-			
+			swapped = false;
+			endStay();
 		}
 		
-		if(event.getReactionEmote().getEmoji().equals("🔀") && event.getUser().isBot() == false && event.getMessageId().equals(pm2.getId()) || event.getMessageId().equals(pm3.getId()))
+		if(event.getReactionEmote().getEmoji().equals("🔀") && event.getMessageId().equals(pm2.getId()))
 		{
 			swapped = true;
 			endSwap();
+		}
+		else if(event.getReactionEmote().getEmoji().equals("🔀") && event.getMessageId().equals(pm3.getId()))
+		{
+			swapped = true;
+			endSwap();
+		}
+		
 		}
 	}
 
@@ -195,17 +217,20 @@ public class ReactionListener extends ListenerAdapter
 				+ " (You can use either Voice Channels or Text Channels for that)"
 				+ " The goal is to end up with the Box containing the carrot."
 				+ " Whoever then has the Carrot, wins! (The game ends once Player 2 has made a decision)"
-				+ " The Bot is meant to have its own Text channel, so prepare one.", false);
+				+ "", false);
 		eb.addBlankField(false);
 		eb.addField("🕊️", "In Memory of Sean Lock 1963 - 2021", false);
 		eb.addField("", quote + "   - Sean Lock", false);
 		
 		emessage = event.getUser().openPrivateChannel().complete().sendMessage(eb.build()).complete();
 		emessage.addReaction("🗑️").queue();
+		help = true;
 	}
 
 	private void endSwap() 
 	{
+		nmessage.delete().queue();
+		
 		EmbedBuilder endSwap = new EmbedBuilder();
 		
 		if(t == 0)
@@ -237,12 +262,15 @@ public class ReactionListener extends ListenerAdapter
 		}
 		
 		Message end1 = endChannel.sendMessage(endSwap.build()).complete();
+		InitializeCommand.rmessage.addReaction("✅").queue();
 		end1.delete().queueAfter(1, TimeUnit.MINUTES);
 		
 	}
 
 	private void endStay() 
 	{
+		nmessage.delete().queue();
+		
 		EmbedBuilder endStay = new EmbedBuilder();
 		
 		if(t == 0)
@@ -274,6 +302,7 @@ public class ReactionListener extends ListenerAdapter
 		}
 		
 		Message end2 = endChannel.sendMessage(endStay.build()).complete();
+		InitializeCommand.rmessage.addReaction("✅").queue();
 		end2.delete().queueAfter(1, TimeUnit.MINUTES);
 	}
 
