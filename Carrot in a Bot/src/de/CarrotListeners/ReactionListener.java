@@ -68,10 +68,10 @@ public class ReactionListener extends ListenerAdapter
 						
 						
 					
-					if(participants.size() == 2)
+					if(participants.size() >= 2)
 					{				
 						message.clearReactions("✅").queue();;
-						nmessage = event.getChannel().sendMessage("A game is currently active!").complete();
+						
 						Random rand = new Random();
 						t = rand.nextInt(1);
 						carrot = new Random().nextBoolean();
@@ -80,7 +80,7 @@ public class ReactionListener extends ListenerAdapter
 						if(player)
 						{
 						player1 = participants.get(0);
-						 player2 = participants.get(1);
+						player2 = participants.get(1);
 						}
 						
 						if(!player)
@@ -88,7 +88,9 @@ public class ReactionListener extends ListenerAdapter
 						player1 = participants.get(1);
 					    player2 = participants.get(0);
 						}
-					
+						
+						nmessage = event.getChannel().sendMessage("A game is currently active!"
+								+ "\n\nCurrent players: " + player1 + " and " + player2).complete();
 					
 					EmbedBuilder bl = new EmbedBuilder();
 					bl.setTitle("You are Player 1!");
